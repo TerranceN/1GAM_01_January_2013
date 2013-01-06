@@ -1,4 +1,4 @@
-1 Game A Month - January
+[1 Game A Month](http://onegameamonth.com/) - January
 ========================
 
 A game made in Haskell using OpenGL and SDL. I'ts going to be a platformer of some sort.
