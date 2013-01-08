@@ -45,4 +45,5 @@ init = do
         SDL.init [SDL.InitEverything]
         SDL.setVideoMode windowWidth windowHeight 32 [SDL.OpenGL, SDL.NoFrame]
         SDL.setCaption "Video Test!!!" "video test"
+        SDL.grabInput True
     initOpenGL

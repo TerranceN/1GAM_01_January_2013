@@ -2,8 +2,8 @@ module GS_Game
 ( newState
 ) where
 
-import Graphics.UI.SDL as SDL
-import Graphics.Rendering.OpenGL hiding (Rect, get, position, Vector2)
+import Graphics.UI.SDL as SDL hiding (Rect)
+import Graphics.Rendering.OpenGL hiding (Rect, get, position, Vector2, Texture)
 
 import Vector2
 
@@ -11,19 +11,30 @@ import Game
 import Input
 import DrawingCommon
 
+import Texture as Texture
+
 data StateData = StateData { inputHandler :: Input
-                           , shouldExit :: Bool }
+                           , shouldExit :: Bool
+                           , testTexture :: Texture }
 
 initialData input = StateData { inputHandler = input
-                              , shouldExit = False }
+                              , shouldExit = False
+                              , testTexture = newTexture }
 
 instance GameState StateData where
+    initialize = GS_Game.initialize
     update = GS_Game.update
     draw = do GS_Game.draw
     isStateFinished = get >>= (\gs -> return (shouldExit gs))
 
 newState :: StateData
 newState = initialData newInput
+
+initialize = do
+    lift $ texture Texture2D $= Enabled
+    loadedTexture <- lift $ Texture.loadTexture "test.png"
+    modify (\gs -> gs { testTexture = loadedTexture })
+    return ()
 
 update deltaTime = do
     gameState <- get
@@ -56,4 +67,7 @@ draw = do
     let inputObject = inputHandler gameState
     lift $ do
         clear [ColorBuffer]
+        loadIdentity
+        bindTexture (testTexture gameState)
+        mapM_ (\x -> drawTexture (testTexture gameState) Nothing (Just (Rect x 100 50 50))) [25, 125 .. 1600]
         SDL.glSwapBuffers
