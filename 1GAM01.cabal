@@ -1,0 +1,17 @@
+name: 1GAM01
+version: 1.0
+build-type: Simple
+cabal-version: >= 1.12
+author: Terrance Niechciol
+
+executable Game
+    main-is: Main.hs
+    default-language: Haskell2010
+    build-depends: base
+                 , transformers
+                 , vector
+                 , mtl
+                 , OpenGL
+                 , SDL
+                 , GLUtil
+                 , JuicyPixels

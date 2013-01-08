@@ -19,5 +19,9 @@ Building
 
 #### Haskell Packages
 
-- [Haskell OpenGL](http://hackage.haskell.org/package/OpenGL) `cabal install opengl`
-- [Haskell SDL](http://hackage.haskell.org/package/SDL-0.6.4) `cabal install sdl`
+- [Haskell OpenGL](http://hackage.haskell.org/package/OpenGL)
+- [Haskell SDL](http://hackage.haskell.org/package/SDL-0.6.4)
+- [GLUtil](http://hackage.haskell.org/package/GLUtil-0.3.0)
+- [JuicyPixels](http://hackage.haskell.org/package/JuicyPixels)
+
+I also included a cabal file now. Unfortunately I'm new to using them so I'm not sure if what I have is sufficient.
