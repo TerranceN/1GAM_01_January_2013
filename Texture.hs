@@ -19,10 +19,24 @@ import DrawingCommon
 
 data Rect a = Rect a a a a
 
+instance Show TexColor where
+    show TexMono = "TexMono"
+    show TexRGB = "TexRGB"
+    show TexRGBA = "TexRGBA"
+    show TexBGR = "TexBGR"
+
+instance Eq TexColor where
+    (==) TexMono TexMono = True
+    (==) TexRGB TexRGB = True
+    (==) TexRGBA TexRGBA = True
+    (==) TexBGR TexBGR = True
+    (==) _ _ = False
+
 data Texture = Texture { getTexObj :: Maybe TextureObject
                        , getTexWidth :: Int
                        , getTexHeight :: Int
                        , getTexColor :: TexColor }
+                       deriving (Show, Eq)
 
 newTexture = Texture { getTexObj = Nothing
                      , getTexWidth = 0
