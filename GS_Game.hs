@@ -13,13 +13,19 @@ import DrawingCommon
 
 import Texture as Texture
 
+import Map
+
 data StateData = StateData { inputHandler :: Input
                            , shouldExit :: Bool
-                           , testTexture :: Texture }
+                           , testTexture :: Texture
+                           , gameMap :: Map
+                           }
 
 initialData input = StateData { inputHandler = input
                               , shouldExit = False
-                              , testTexture = newTexture }
+                              , testTexture = newTexture
+                              , gameMap = newMap
+                              }
 
 instance GameState StateData where
     initialize = GS_Game.initialize
@@ -30,10 +36,30 @@ instance GameState StateData where
 newState :: StateData
 newState = initialData newInput
 
+positionRect :: Integral a => a -> a -> [Position]
+positionRect width height =
+    (positionRow 0)
+ ++ (positionRow height)
+ ++ (positionColumn 0)
+ ++ (positionColumn width)
+  where
+    positionRow h =
+        foldr (\a b -> (Position (fromIntegral a) (fromIntegral h)):b)
+            [] [0..width]
+    positionColumn x =
+        foldr (\a b -> (Position (fromIntegral x) (fromIntegral a)):b)
+            [] (colRange 1 (height - 1))
+    colRange low high =
+        if low >= high
+            then []
+            else [low..high]
+
 initialize = do
     lift $ texture Texture2D $= Enabled
     loadedTexture <- lift $ Texture.loadTexture "test.png"
     modify (\gs -> gs { testTexture = loadedTexture })
+    modify (\gs -> gs { gameMap =
+        addTiles (testTexture gs) (positionRect 10 5) (gameMap gs) })
     return ()
 
 update deltaTime = do
@@ -68,6 +94,8 @@ draw = do
     lift $ do
         clear [ColorBuffer]
         loadIdentity
-        bindTexture (testTexture gameState)
-        mapM_ (\x -> drawTexture (testTexture gameState) Nothing (Just (Rect x 100 50 50))) [25, 125 .. 1600]
+        scale (2 :: GLdouble) 2 1
+        drawMap (gameMap gameState)
+        --bindTexture (testTexture gameState)
+        --mapM_ (\x -> drawTexture (testTexture gameState) Nothing (Just (Rect x 100 50 50))) [25, 125 .. 1600]
         SDL.glSwapBuffers
